@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
+const itemsPerPage = 10;
+
 const App = () => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+
+  
 
   useEffect(() => {
     fetchData();
@@ -16,7 +20,7 @@ const App = () => {
     setIsLoading(true);
 
     // Replace 'your-api-url' with your API endpoint
-    fetch(`your-api-url?page=${page}`)
+    fetch(`https://jsonplaceholder.typicode.com/users?_page=1&_limit=10`)
       .then((response) => response.json())
       .then((newData) => {
         setData((prevData) => [...prevData, ...newData]);

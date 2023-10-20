@@ -63,8 +63,10 @@
 
 import React, { useState } from 'react';
 import Pagination from './Pagination';
+import items from './items';
+ // Your list of items to paginate
 
-const items = [...]; // Your list of items to paginate
+
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState(1);

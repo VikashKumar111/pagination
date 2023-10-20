@@ -61,36 +61,54 @@
 
 
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Pagination from './Pagination';
-import items from './items';
+// import items from './items';
  // Your list of items to paginate
 
 
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [items, setItems] = useState([])
   const itemsPerPage = 10; // Number of items to display per page
 
   const onPageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     // Implement logic to fetch and display data for the selected page
+    const apiUrl = `https://jsonplaceholder.typicode.com/photos?_page=${pageNumber}&_limit=10`;
+
+  fetch(apiUrl)
+    .then((response) => response.json())
+    .then((data) => {
+      // Assuming the API response contains an array of items
+      setItems(data);
+    })
+    .catch((error) => {
+      // Handle errors, e.g., show an error message to the user
+      console.error("Error fetching data: ", error);
+    });
   };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
+  useEffect(() => {
+    // Fetch initial data when the component mounts
+    onPageChange(currentPage);
+  }, [currentPage]);
+
+  // const indexOfLastItem = currentPage * itemsPerPage;
+  // const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  // const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div>
       {/* Render your items */}
-      {currentItems.map((item) => (
+      {items.map((item) => (
         // Render your item component here
-        <div key={item.id}>{item.name}</div>
+        <div key={item.id}>{item.title}</div>
       ))}
 
       {/* Render pagination component */}
-      <Pagination totalItems={items.length} itemsPerPage={itemsPerPage} onPageChange={onPageChange} />
+      <Pagination totalItems={100} itemsPerPage={itemsPerPage} onPageChange={onPageChange} />
     </div>
   );
 };
